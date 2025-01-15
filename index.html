@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWG/DXF Generator</title>
+</head>
+<body>
+    <h1>Rectangle Shape Generator</h1>
+    <form id="rectangleForm">
+        <label for="length">Length (L):</label>
+        <input type="number" id="length" required>
+        <br><br>
+        <label for="width">Width (W):</label>
+        <input type="number" id="width" required>
+        <br><br>
+        <button type="submit">Generate DXF</button>
+    </form>
+    <div id="downloadLink"></div>
+
+    <script>
+        document.getElementById("rectangleForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const length = document.getElementById("length").value;
+            const width = document.getElementById("width").value;
+
+            fetch('/generate-dxf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ length, width }),
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'rectangle.dxf';
+                link.textContent = 'Download DXF File';
+                document.getElementById("downloadLink").appendChild(link);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
