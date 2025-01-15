@@ -18,8 +18,11 @@ def generate_dxf():
     doc = ezdxf.new('R2000')
     msp = doc.modelspace()
 
-    # Create the rectangle with 4 corners
+    # Add a rectangle using 4 points, making sure we close the polyline
     msp.add_lwpolyline([(0, 0), (length, 0), (length, width), (0, width)], close=True)
+
+    # Debug: Print the entities added to the DXF file
+    print("Entities in the DXF file:", doc.entities)
 
     # Create a BytesIO object to save the file content into memory
     output = BytesIO()
